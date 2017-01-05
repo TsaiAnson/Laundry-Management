@@ -1,8 +1,15 @@
 
+/**
+ * Object that represents a Line (Implementation of Queue).
+ * @author Yuan-Cheng Tsai
+ * */
+
 public class Line implements Queue
 {
+	/** Queue uses a Linked-List (ListNode). */
 	private ListNode list;
-	
+
+	/** Constructor of LINE. */
 	public Line()
 	{
 		list = null;
@@ -18,6 +25,7 @@ public class Line implements Queue
 		return true;
 	}
 
+	/** Returns the size of the line. */
 	public int getSize()
 	{
 		ListNode current = list;
@@ -30,12 +38,14 @@ public class Line implements Queue
 		}
 		return i;
 	}
-	
+
+	/** Returns the node of LINE. */
 	public ListNode getNode()
 	{
 		return list;
 	}
-	
+
+	/** Sets the ListNode LIST to ListNode L1. */
 	public void setNode(ListNode l1)
 	{
 		list = l1;

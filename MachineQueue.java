@@ -3,35 +3,50 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Object representing a line of machines (reserved time slots).
+ * @author Yuan-Cheng Tsai
+ * */
 
 public class MachineQueue 
 {
+	/** String NAME and DAY, which holds the name and the day. */
 	private String Name, Day;
+
+	/** Line L1 which holds the line of the machines. */
 	private Line L1;
+
+	/** DateFormat DATEFORM which holds the DateFormat HH:mm (for time). */
 	private DateFormat DateForm = new SimpleDateFormat("HH:mm");
-	
+
+	/** Constructor of MachineQueue. */
 	public MachineQueue(String nm, String day)
 	{
 		Name= nm;
 		Day = day;
 		L1 = new Line();
 	}
-	
+
+	/** Returns String NAME. */
 	public String returnName()
 	{
 		return Name;
 	}
-	
+
+	/** Returns String DAY. */
 	public String returnDay()
 	{
 		return Day;
 	}
-	
+
+	/** Returns Line L1. */
 	public Line getLi()
 	{
 		return L1;
 	}
-	
+
+	/** Creates a Reservation R1 using String TIME and Student S, adds R1 to the end of L1,
+	 * and returns String CODE (which is the code to access the reservation. */
 	public String addR(String time, Student s) throws ParseException
 	{
 		String code = s.getName().substring(0,3)+Day.substring(0,3)+time;
@@ -63,9 +78,9 @@ public class MachineQueue
 			L1.setNode(copy);
 		}
 		return code;
-		//NEED TO BUG TEST
 	}
-	
+
+	/** Method that returns TRUE if Student S is valid, false otherwise. */
 	public boolean findStudent(Student s)
 	{
 		if (L1 == null)

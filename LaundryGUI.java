@@ -23,15 +23,37 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+/**
+ * Class that manages the Laundry center and also holds the GUI interface.
+ * @author Yuan-Cheng Tsai
+ * */
+
 public class LaundryGUI 
 {
-	private String[] TimeAL = {"00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"};
+    /** StringArray TIMEAL which holds all the possible time slots for reservations. */
+	private String[] TimeAL = {"00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00",
+            "05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","10:00","10:30","11:00","11:30","12:00",
+            "12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30",
+            "19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30"};
+
+    /** StringArray WEEKDAYS which holds all the days of the week. */
 	private String[] WeekDays = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
+
+    /** ArrayList WEEKDAYSAL which holds the days of the week. */
 	private ArrayList<String> WeekDaysAL = new ArrayList<String>(Arrays.asList(WeekDays));
-	private Day[] Week = {new Day(WeekDays[0]),new Day(WeekDays[1]),new Day(WeekDays[2]),new Day(WeekDays[3]),new Day(WeekDays[4]),new Day(WeekDays[5]),new Day(WeekDays[6])};;
+
+    /** DayArray WEEK that holds DAY Objects for each day of the week. */
+	private Day[] Week = {new Day(WeekDays[0]),new Day(WeekDays[1]),new Day(WeekDays[2]),new Day(WeekDays[3]),
+            new Day(WeekDays[4]),new Day(WeekDays[5]),new Day(WeekDays[6])};
+
+    /** ArrayList SL that holds the Students who have reserved a slot. */
 	private ArrayList<Student> SL = new ArrayList<Student>();
+
+    /** DateFormat DATEFORM which is a DateFormat HH:mm (for time). */
 	private DateFormat DateForm = new SimpleDateFormat("HH:mm");
-	
+
+    /** Method that Starts the program and GUI interface. It adds sample Students who
+     * can then reserve a time slot. */
 	public void Start()
 	{
 		SL.add(new Student ("John Park", "12345"));
@@ -44,7 +66,7 @@ public class LaundryGUI
 	    {
 	        while (true) 
 	        {
-	            CleanUP();
+	            cleanUp();
 	            Thread.sleep(30 * 1000);
 	        }
 	    } 
@@ -53,7 +75,8 @@ public class LaundryGUI
 	        e.printStackTrace();
 	    }
 	}
-	
+
+    /** Creates and displays the HOME frame, where the user will interact with the most. */
 	@SuppressWarnings("serial")
 	public void Home()
 	{		
@@ -134,9 +157,15 @@ public class LaundryGUI
 	    
 	    H.setVisible(true);
 	}
-	
+
+    /** A JTextField MODULART that will be used for handling RESERVATION Codes in both
+     * checking-in and cancelation. */
 	JTextField ModularT = new JTextField();
-	
+
+    /** Creates and displays a generic window that will be used to display information in
+     * many situations, such as checking-in and cancelation. Method also checks the
+     * reservation code if it's valid (the reservation has to be next). f not, it will call
+     * ModularWarning to display the appropriate alert.*/
 	@SuppressWarnings("serial")
 	public void ModularWindow(String type) throws ParseException
 	{
@@ -171,6 +200,7 @@ public class LaundryGUI
             	else
             	{
             		System.out.println("Warning");
+            		/* IncID: incorrect ID */
             		ModularWarning("IncID","","");
             	}
                 
@@ -190,6 +220,7 @@ public class LaundryGUI
                 Line dayl = Week[day-1].getWasher().getLi();
                 Reservation r1 = (Reservation) dayl.peek();
                 if (r1 == null)
+                    /* IncCo: incorrect code. */
                 	ModularWarning("IncCo","","");
                 else
                 {
@@ -204,9 +235,11 @@ public class LaundryGUI
 						try {td = DateForm.parse(tTime);} catch (ParseException e) {e.printStackTrace();}
 	                	//long difference = d1.getTime() - td.getTime();
 	                	if (td.before(d1))
+	                	    /* CoCoIT: correct code, incorrect time*/
 	                		ModularWarning("CoCoIT","","");
 	                	else
 	                	{
+	                	    /* CoCoCT: correct code, correct time */
 	                		ModularWarning("CoCoCT","","");
 	                		M.dispose();
 	                		dayl.next();
@@ -339,13 +372,20 @@ public class LaundryGUI
 	    
 	    M.setVisible(true);
 	}
-	
+
+    /** JComboBox CDAYS that will hold WEEKDAYS. */
 	JComboBox<String> CDays = new JComboBox<String>(WeekDays);
-	
+
+    /** DefaultListModel DLM that will display selectable labels. */
 	DefaultListModel<String> DLM = new DefaultListModel<String>();
+
+    /** JList SERLI that will hold the DLM. */
     JList<String> SerLi = new JList<String>(DLM);
+
+    /** JScrollPane SCROLLPANE for SERLI. */
     JScrollPane scrollPane = new JScrollPane(SerLi);
-	
+
+    /** Creates and displays a frame where Student S can sign up for a reservation. */
 	@SuppressWarnings("serial")
 	public void SignUp(Student s)
 	{
@@ -429,7 +469,9 @@ public class LaundryGUI
 	    
 	    SU.setVisible(true);
 	}
-	
+
+    /** Method that searches for any existing reservations that Student S has made on Day DAY
+     * and notifies the user if there are conflicts. */
 	public void Search(String day, Student s)
 	{
 		ListNode temp;
@@ -471,12 +513,9 @@ public class LaundryGUI
 			}
 		}
 	}
-	
-	public void CleanUP()
-	{
-		
-	}
-	
+
+    /** Creates and displays a frame MODULARWARNING that is used for many situations
+     * where the user needs to be alerted, such as a conflicting reservation. */
 	public void ModularWarning(String type, String text, String text1)
 	{
 		JFrame MW = new JFrame(); 
@@ -559,7 +598,9 @@ public class LaundryGUI
 	    
 	    MW.setVisible(true);
 	}
-	
+
+	/** Method that checks if any reservations were missed. If so, the over due reservations
+     * will be removed. */
 	public void cleanUp()
 	{
 		System.out.println("EnterCode");
