@@ -93,6 +93,7 @@ public class LaundryGUI
             public void windowClosing(WindowEvent e)
             {
                 H.dispose();
+                System.exit(0);
             }
         });
 	    
